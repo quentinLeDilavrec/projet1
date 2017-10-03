@@ -62,12 +62,13 @@ let pegs: peg array = Array.of_list (build 3 Mystack.create);;
   Array.of_list (build nb_discs random_color);;*)
 
 (* Window parameters *)
-let width = 8 * (15 + 10 * (nb_discs + 1)) + 80
+let width = 800
 and height = (nb_discs + 2) * 20 + 50;;
 
 let disc_height = 20;;
-let disc_base_width = 30;;
-let peg_width = 20;;
+let peg_width = 15;;
+let bigger_disc= width/Array.length pegs;;
+let disc_base_width = bigger_disc/nb_discs;;
 
 (* Animation setup *)
 let animation_speed = 10.;;
@@ -77,17 +78,12 @@ let animation_speed = 10.;;
 (* Draw the three pegs *)
 let draw_pegs () =
   let peg_height = height - 50 in
-  let draw_single_peg () =
-    draw_rect (current_x () - peg_width / 2) (current_y ()) peg_width peg_height in
+  let draw_single_peg i _ =
+    draw_rect ((bigger_disc/2-peg_width/2)+(i*(width-bigger_disc)/((Array.length pegs)-1))) 0 peg_width peg_height in
   let step = width / 4 in
   begin
     set_color (rgb 0 0 0);
-    moveto step 0;
-    draw_single_peg ();
-    rmoveto step 0;
-    draw_single_peg ();
-    rmoveto step 0;
-    draw_single_peg ();
+    Array.iteri draw_single_peg pegs
   end;;
 
 (* Initialize the scene *)
@@ -101,7 +97,7 @@ let init () =
 let update_window () =
   let draw_disc x y taille =
     let disc_width = disc_base_width * (taille+1) in
-    fill_rect (x - disc_width / 2) y disc_width disc_height in
+    fill_rect (x - disc_width / 2) (y-disc_height) disc_width disc_height in
   begin
     clear_graph ();
     draw_pegs ();
@@ -109,7 +105,9 @@ let update_window () =
       let call_draw j disc = (*draw disc*)
         begin
           set_color disc.color;
-          draw_disc (i*width/((Array.length pegs)-1)) (j*20) disc.taille;
+          draw_disc (((bigger_disc/2-peg_width/2)+(i*(width-bigger_disc)/((Array.length pegs)-1)))+peg_width/2)
+
+            (((Mystack.length peg) - j)*20) disc.taille;
         end in
       Mystack.iteri call_draw peg in
     Array.iteri handle_peg pegs (*iter over pegs*)
