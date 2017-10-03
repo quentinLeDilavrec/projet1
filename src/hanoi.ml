@@ -1,3 +1,4 @@
+#use "hanoi_common.ml";;
 open Hanoi_common;;
 
 let counter = new counter 0;;
