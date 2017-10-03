@@ -74,36 +74,6 @@ end;;
 
 let animation = new animation handler;;
 
-let animation = object(self)
-
-  val tri_state = ((ref []):penrose_triangle list ref)
-
-  (* Handle the keybord inputs*)
-  method private handler x =
-    (*match used as a switch case*)
-    match x.key with
-    | '\027' -> raise Exit;
-    | ' '    -> tri_state := !tri_state
-                             |> List.map divide_once
-                             |> List.concat;
-    | other  -> draw_string ((Char.escaped other)^" ")
-
-  (* Initialise tri_state *)
-  method start first_penrose_triangle =
-    set_random_color();
-    let triangle = get_triangle first_penrose_triangle in
-    draw_triangle triangle;
-    tri_state := [first_penrose_triangle];
-    (loop_at_exit [Key_pressed] self#handler);
-
-    (* Reinitialise tri_state *)
-  method restart first_penrose_triangle =
-    set_random_color();
-    let triangle = get_triangle  first_penrose_triangle in
-    draw_triangle triangle;
-    tri_state := [first_penrose_triangle];
-
-end;;
 
 
 (*-------------Main program--------------------------------*)
