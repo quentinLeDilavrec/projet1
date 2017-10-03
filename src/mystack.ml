@@ -2,7 +2,7 @@
 (*taken from ocaml repo on github
  I just added the iteri*)
 
-module type Mstack =
+module type Mystack =
 sig
 
   type 'a t
@@ -56,7 +56,7 @@ sig
 end
 ;;
  
-module Mstack = 
+module Mystack = 
 struct
   type 'a t = { mutable c : 'a list; mutable len : int; }
   

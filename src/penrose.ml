@@ -1,3 +1,5 @@
+#use "common.ml";;
+#use "penrose_common.ml";;
 open Graphics;;
 open Common;;
 open Penrose_common;;

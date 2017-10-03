@@ -1,8 +1,8 @@
-(* #load "graphics.cma";;
-#load "unix.cma";; *)
+#use "hanoi_common.ml";;
+#use "mystack.ml";;
 open Graphics;;
 open Unix;;
-open Mstack;;
+open Mystack;;
 
 
 let rec build nb f = 
@@ -49,11 +49,11 @@ end;;
 
 (* Types *)
 type disc = {taille:int ; color:Graphics.color}
-type peg = disc Mstack.t;;
+type peg = disc Mystack.t;;
 
 (* Global discs & pegs parameters *)
 let nb_discs = 12;;
-let pegs: peg array = Array.of_list (build 3 Mstack.create);;
+let pegs: peg array = Array.of_list (build 3 Mystack.create);;
 (*let disc_colors = 
   let rec build nb color = 
     if nb=0 then [] 
@@ -94,7 +94,7 @@ let draw_pegs () =
 let init () =
   draw_pegs ();
   for i = (nb_discs - 1) downto 0 do
-    Mstack.push {taille=i;color=random_color()} pegs.(0)
+    Mystack.push {taille=i;color=random_color()} pegs.(0)
   done;;
 
 (* Update the graphics state *)
@@ -111,7 +111,7 @@ let update_window () =
           set_color disc.color;
           draw_disc (i*width/((Array.length pegs)-1)) (j*20) disc.taille;
         end in
-      Mstack.iteri call_draw peg in
+      Mystack.iteri call_draw peg in
     Array.iteri handle_peg pegs (*iter over pegs*)
   end;;
 
@@ -121,7 +121,7 @@ let counter = new counter 0;;
 let movement_big pegs origin destination =
   print_string ("| move a disc from peg " ^ (string_of_int origin) ^ " to peg " ^ (string_of_int destination));
   print_newline ();
-  Mstack.push (Mstack.pop pegs.(origin)) pegs.(destination);
+  Mystack.push (Mystack.pop pegs.(origin)) pegs.(destination);
   update_window ();
   counter#step ();
   sleepf (1. /. animation_speed);;

@@ -1,6 +1,6 @@
-(* #load "graphics.cma";; *)
-(* #use "common.ml"
-#use "penrose_common.ml" *)
+#load "graphics.cma";;
+#use "common.ml";;
+#use "penrose_common.ml";;
 open Graphics;;
 open Common;;
 open Penrose_common;;
@@ -61,18 +61,19 @@ let handler tri_state x =
   | ' '    -> tri_state := !tri_state
                            |> List.map divide_once
                            |> List.concat;
-  | other  -> draw_string ((Char.escaped other)^" ")
+  | other  -> (* draw_string ((Char.escaped other)^" ") *) ()
+;;
 
 class pen_animation handler = object
   inherit [penrose_triangle] animation handler as super
   method start first_penrose_triangle = 
     set_random_color();
-    let triangle = get_triangle first_penrose_triangle in
-    draw_triangle triangle;
+    draw_triangle (get_triangle first_penrose_triangle);
+    print_int 1;
     super#start first_penrose_triangle;
 end;;
 
-let animation = new animation handler;;
+let animation = new pen_animation handler;;
 
 
 
@@ -99,5 +100,3 @@ let starting_triangle = {apex=apex; s1=s1; s2=s2} in
 animation#start (if start_with_acute_triangle 
                  then Acute starting_triangle 
                  else Obtuse starting_triangle);;
-
-let aaaa = ();;
